@@ -1,0 +1,56 @@
+---
+title: "Ranking Test in Sensory Evaluation"
+author: "Alexis Zhaid Carrillo García"
+date: "2025-04-02"
+output: html_document
+bibliography: references.bib
+csl: APA.csl
+---
+
+The ranking test is a sensory analysis method used to establish a preference order among multiple samples. It is particularly useful when judges are required to rank products from most to least preferred without ties.
+
+To statistically analyze the results of such tests, the non-parametric Friedman test is a robust option. It determines whether there are statistically significant differences between the evaluated treatments, considering the variability among judges [@meilgaard2016].
+
+## Objective
+
+To evaluate whether there are significant differences in the preference of treatments formulated with different ratios using the Friedman test, and if so, to identify which treatments differ significantly using a post-hoc analysis.
+
+## Practical example
+
+In this example, a sensory ranking test was conducted with 60 panelists who evaluated four beverage formulations based on varying proportions of two ingredients: mango pulp and passion fruit extract. The treatment ratios were: 75:25, 50:50, 25:75, and 0:100. Each panelist ranked the four samples from 1 (most preferred) to 4 (least preferred), with no ties allowed.
+
+```{r, echo=FALSE}
+library(readxl)
+library(agricolae)
+
+data <- read_excel("Datos Ordenamiento.xlsx")
+```
+
+```{r}
+print(data)
+```
+
+## Friedman Test
+
+```{r}
+# Apply Friedman test
+friedman_result <- with(data, friedman(trt = Tratamiento, judge = Sujeto, evaluation = Valor))
+
+# Display results
+friedman_result
+```
+
+### Interpretation
+
+The Friedman test checks whether the medians of the rankings assigned to the treatments differ significantly. If the p-value is less than the significance level (usually 0.05), the null hypothesis that all treatments are equally preferred is rejected.
+
+## Ranking Mean Comparison
+
+If the Friedman test indicates significant differences, a multiple comparison of average ranks is performed to identify which treatments differ from each other.
+
+- **Mean ranking**: lower values indicate higher preference.
+- **Groups**: treatments sharing the same letter are not significantly different based on the multiple range test.
+
+Based on the results, it is possible to draw conclusions about which treatment(s) were significantly preferred by the judges. This information is essential to guide reformulation, product selection, or acceptance decisions during product development.
+
+## References
